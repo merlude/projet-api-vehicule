@@ -1,30 +1,26 @@
+import {authenticate} from '@loopback/authentication'; // add
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
 import {Car} from '../models';
 import {CarRepository} from '../repositories';
 
+@authenticate('jwt') // add
 export class CarController {
   constructor(
     @repository(CarRepository)
-    public carRepository : CarRepository,
-  ) {}
+    public carRepository: CarRepository,
+  ) { }
 
   @post('/cars')
   @response(200, {

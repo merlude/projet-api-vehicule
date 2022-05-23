@@ -1,30 +1,26 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
 import {Notebook} from '../models';
 import {NotebookRepository} from '../repositories';
 
+@authenticate('jwt')
 export class NotebookController {
   constructor(
     @repository(NotebookRepository)
-    public notebookRepository : NotebookRepository,
-  ) {}
+    public notebookRepository: NotebookRepository,
+  ) { }
 
   @post('/notebooks')
   @response(200, {

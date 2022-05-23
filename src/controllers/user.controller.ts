@@ -1,30 +1,41 @@
+import {authenticate, TokenService} from '@loopback/authentication';
+import {
+  MyUserService, TokenServiceBindings, UserServiceBindings
+} from '@loopback/authentication-jwt';
+import {inject} from '@loopback/core';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
+import {SecurityBindings} from '@loopback/security';
 import {User} from '../models';
 import {UserRepository} from '../repositories';
 
+@authenticate('jwt')
 export class UserController {
   constructor(
-    @repository(UserRepository)
-    public userRepository : UserRepository,
-  ) {}
+    @inject(TokenServiceBindings.TOKEN_SERVICE)
+    public jwtService: TokenService,
+    @inject(UserServiceBindings.USER_SERVICE)
+    public userService: MyUserService,
+    @inject(SecurityBindings.USER, {optional: true})
+
+    //public user: UserProfile, // add
+    public user: UserRepository,
+    @repository(UserRepository) protected userRepository: UserRepository, //add
+
+    //@repository(UserRepository) //last
+    //public userRepository: UserRepository, //last
+  ) { }
 
   @post('/users')
   @response(200, {
